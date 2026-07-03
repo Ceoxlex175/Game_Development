@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body{
+    background:#111;
+    color:white;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    margin:0;
+}
+img{
+    width:300px;
+    height:300px;
+    margin-bottom:20px;
+}
+.buttons{
+    display:flex;
+    gap:15px;
+}
+button{
+    width:80px;
+    height:80px;
+    font-size:30px;
+}
+</style>
+</head>
+<body>
+
+<img id="gif" src="default.gif">
+
+<div class="buttons">
+    <button data-dir="left">⬅</button>
+    <button data-dir="down">⬇</button>
+    <button data-dir="up">⬆</button>
+    <button data-dir="right">➡</button>
+</div>
+
+<script>
+const gif = document.getElementById("gif");
+let currentAudio = null;
+
+function startAction(dir){
+    gif.src = dir + ".gif";
+
+    if(currentAudio){
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+    }
+
+    currentAudio = new Audio(dir + ".mp3");
+    currentAudio.loop = true;
+    currentAudio.play();
+}
+
+function stopAction(){
+    gif.src = "default.gif";
+
+    if(currentAudio){
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+    }
+}
+
+document.querySelectorAll("button").forEach(btn=>{
+    const dir = btn.dataset.dir;
+
+    btn.addEventListener("mousedown", ()=>startAction(dir));
+    btn.addEventListener("mouseup", stopAction);
+    btn.addEventListener("mouseleave", stopAction);
+
+    btn.addEventListener("touchstart", ()=>startAction(dir));
+    btn.addEventListener("touchend", stopAction);
+});
+</script>
+
+</body>
+</html>
